@@ -1,13 +1,24 @@
 {
+    "manifest_version": 2,
+    "minimum_chrome_version": "23",
+
     "name": "Codeforces Solved Status Viewer",
     "version": "0.0.0",
-    "manifest_version": 2,
     "description": "An easy way to check the solved status of Codeforces",
+
     "app": {
         "background": {
             "scripts": [
                 "js/application/background.js"
             ]
         }
-    }
+    },
+
+    "permissions": [
+        "*://www.codeforces.com/",
+        "*://codeforces.com/",
+        "*://www.codeforces.ru/",
+        "*://codeforces.ru/"
+    ]
+
 }
