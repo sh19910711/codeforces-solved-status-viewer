@@ -14,6 +14,8 @@
   "gitHead": "9e28179084db45f8762b8bdd04dfe27c13432e19",
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1"
+    "grunt": "~0.4.1",
+    "grunt-contrib-sass": "~0.3.0",
+    "grunt-contrib": "~0.6.1"
   }
 }
