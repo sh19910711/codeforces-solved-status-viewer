@@ -1,12 +1,23 @@
 (function( global ) {
-    "use strict";
-
-    global.MANIFEST = {};
+    'use strict';
 
     requirejs(
         {
             "paths": {
-                "jquery": "components/jquery/jquery"
+                "jquery": 'components/jquery/jquery',
+                "underscore": 'components/underscore/underscore',
+                "common": 'application/common',
+                "utils": 'application/utils'
+            }
+        }
+    );
+
+    requirejs.config(
+        {
+            "shim": {
+                "underscore": {
+                    "exports": '_'
+                }
             }
         }
     );
@@ -14,23 +25,14 @@
     require(
 
         [
-            "jquery"
+            'jquery',
+            'underscore',
+            'common',
+            'utils'
         ],
 
-        function( $ ) {
-
-            function load_manifest_json() {
-                var deferred = new $.Deferred();
-
-                // manifest.jsonを読み込み、取得した情報をMANIFESTに格納する
-                var url = '../../manifest.json';
-                $.getJSON(url, function(manifest) {
-                    MANIFEST = manifest;
-                    deferred.resolve();
-                });
-
-                return deferred.promise();
-            }
+        function( $, _, Common, Utils ) {
+            _(window).extend(Common);
 
             function init_html() {
                 // ヘッダーの準備をする
@@ -44,16 +46,19 @@
                 var body = $('body');
                 body.empty();
                 var body_header = $('<h1></h1>');
+                body_header.attr('id', 'title');
                 body_header.text(MANIFEST.name);
                 body.append(body_header);
             }
 
-            $.when.apply(
+            $.when
+            .apply(
                 $.when,
                 [
-                    load_manifest_json()
+                    Utils.load_manifest_json()
                 ]
-            ).done(function() {
+            )
+            .done(function() {
                 init_html();
             });
         }
