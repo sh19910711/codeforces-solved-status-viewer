@@ -12,5 +12,8 @@ npm install --dev
 ### Install Components
 cd ./js && bower install
 
+### Grunt
+grunt
+
 ## Copyrights
 Copyright (C) 2013 Hiroyuki Sano. All Rights Reserved.

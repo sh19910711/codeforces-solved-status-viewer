@@ -1,8 +1,11 @@
 {
   "dependencies": {
     "jquery": "~1.9.1",
+    "async": "~0.2.5",
     "backbone": "~1.0.0",
-    "underscore": "~1.4.4",
-    "requirejs": "~2.1.5"
-  }
+    "requirejs": "~2.1.5",
+    "underscore": "~1.4.4"
+  },
+  "name": "codeforces-solved-status-viewer-components",
+  "version": "0.0.0"
 }

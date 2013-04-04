@@ -13,7 +13,7 @@
             // Example:
             //  load_manifest_json().done(callback)
             //  callback(function( json_object ) { ... })
-            exports.load_manifest_json = function load_manifest_json() {
+            exports.loadManifestJSON = function load_manifest_json() {
                 var deferred = new $.Deferred();
 
                 // manifest.jsonを読み込み、取得した情報をMANIFESTに格納する
