@@ -8,7 +8,7 @@
         ],
 
         function( exports ) {
-            exports.DATABASE_SCHEME_VERSION = '0';
+            exports.DATABASE_SCHEME_VERSION = 0;
             exports.MANIFEST = {}; // parsed manifest.json data
         }
 

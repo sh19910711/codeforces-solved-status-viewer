@@ -18,7 +18,8 @@
         "*://www.codeforces.com/",
         "*://codeforces.com/",
         "*://www.codeforces.ru/",
-        "*://codeforces.ru/"
+        "*://codeforces.ru/",
+        "storage"
     ]
 
 }

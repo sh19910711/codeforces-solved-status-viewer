@@ -29,6 +29,10 @@
                 return deferred.promise();
             };
 
+            Utils.isUndefined = function isUndefined( value ) {
+                return typeof value === 'undefined';
+            };
+
             _(exports).extend(Utils);
 
         }
