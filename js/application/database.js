@@ -4,13 +4,19 @@
     define(
 
         [
-            'exports'
+            'exports',
+            'underscore'
         ],
 
-        function( exports ) {
-            console.log(DATABASE_SCHEME_VERSION);
+        function( exports, _ ) {
             var Database = {};
-            exports = Database;
+
+            Database.init = function InitDatabase( callback ) {
+                console.log('Database.init');
+                callback();
+            };
+
+            _(exports).extend(Database);
         }
 
     );

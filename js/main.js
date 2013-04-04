@@ -54,11 +54,12 @@
                 ],
 
                 function( Utils, Database ) {
+                    console.log(Database);
 
                     asyncjs.series(
                         [
-                            InitHTML
-                            // TODO: データベースの初期化
+                            InitHTML,
+                            Database.init
                         ],
                         AfterInit
                     );

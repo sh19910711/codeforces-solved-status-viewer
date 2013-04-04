@@ -5,15 +5,18 @@
 
         [
             'exports',
-            'jquery'
+            'jquery',
+            'underscore'
         ],
 
-        function( exports, $ ) {
+        function( exports, $, _ ) {
+
+            var Utils = {};
 
             // Example:
             //  load_manifest_json().done(callback)
             //  callback(function( json_object ) { ... })
-            exports.loadManifestJSON = function load_manifest_json() {
+            Utils.loadManifestJSON = function LoadManifestJSON() {
                 var deferred = new $.Deferred();
 
                 // manifest.jsonを読み込み、取得した情報をMANIFESTに格納する
@@ -25,6 +28,8 @@
 
                 return deferred.promise();
             };
+
+            _(exports).extend(Utils);
 
         }
 
