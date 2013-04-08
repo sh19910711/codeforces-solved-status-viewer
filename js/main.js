@@ -1,8 +1,14 @@
 (function( global ) {
     'use strict';
 
-    // パスなどの設定
-    requirejs(
+    // グローバルな変数
+    var global_vars = {
+        contest_names: {},
+        contest_keys: []
+    };
+
+    // 読み込むスクリプトの設定
+    requirejs.config(
         {
             "paths": {
                 "jquery": 'components/jquery/jquery',
@@ -12,13 +18,8 @@
                 "common": 'application/common',
                 "utils": 'application/utils',
                 "database": 'application/database'
-            }
-        }
-    );
+            },
 
-    // 依存関係の定義
-    requirejs.config(
-        {
             "shim": {
                 "underscore": {
                     "exports": '_'
@@ -44,6 +45,7 @@
         ],
 
         function EntryPoint( $, _, asyncjs, Common ) {
+            _(window).extend(global_vars);
             _(window).extend(Common);
 
             require(
@@ -70,12 +72,13 @@
                 );
 
                 function AfterInit() {
+                    console.log('@AfterInit');
                     $.when
                     .apply(
                         $.when,
                         [
                             Utils.loadManifestJSON(),
-                            GetContestListFromDatabase()
+                            GetContestData()
                         ]
                     )
                     .done(AfterLoading);
@@ -83,33 +86,64 @@
 
                 function AfterLoading() {
                     SetHTMLContent();
-                    var keys = Object.keys(contest_list);
-                    keys.forEach(function( key ) {
-                        var contest = contest_list[key];
-                        $('body').append(contest+'<br>');
+                    contest_keys.forEach(function( key ) {
+                        var contest_name = contest_names[key];
+                        $('body').append(contest_name+'<br>');
                     });
                 }
 
                 function SetupDatabase( callback ) {
                     // default_contest_listから追加
-                    var data = {};
+                    var contest_names = {};
+                    var contest_keys = [];
+
                     $.getJSON('../../default_contest_list.json', function( contest_list ) {
                         contest_list.forEach(function( contest ) {
                             var name = contest.contest_name;
                             var url = contest.enter_url;
-                            data[url] = name;
+                            var key = url.match(/^\/contest\/([0-9]*)$/)[1];
+                            contest_names[key] = name;
+                            contest_keys.push(key);
                         });
-                        Database.set(Database.key.contestList, data, callback);
+                        asyncjs.parallel(
+                            [
+                                Database.set.bind(null, Database.key.contestNames, contest_names),
+                                Database.set.bind(null, Database.key.contestKeys, contest_keys)
+                            ],
+                            AfterSetupDatabase
+                        );
                     });
 
-                    // TODO: 足りないコンテストリストをCodeforcesから取得する
+                    function AfterSetupDatabase() {
+                        // TODO: 足りないコンテストリストをCodeforcesから取得する
+                        callback();
+                    }
                 }
 
-                function GetContestListFromDatabase() {
+                function GetContestData() {
+                    return $.when.apply(
+                        null,
+                        [
+                            GetContestNamesFromDatabase(),
+                            GetContestKeysFromDatabase()
+                        ]
+                    );
+                }
+
+                function GetContestNamesFromDatabase() {
                     var deferred = new $.Deferred();
-                    Database.get(Database.key.contestList, function( contest_list ) {
-                        window.contest_list = contest_list;
-                        deferred.resolve(contest_list);
+                    Database.get(Database.key.contestNames, function( contest_names ) {
+                        window.contest_names = contest_names;
+                        deferred.resolve(contest_names);
+                    });
+                    return deferred;
+                }
+
+                function GetContestKeysFromDatabase() {
+                    var deferred = new $.Deferred();
+                    Database.get(Database.key.contestKeys, function( contest_keys ) {
+                        window.contest_keys = contest_keys;
+                        deferred.resolve(contest_keys);
                     });
                     return deferred;
                 }

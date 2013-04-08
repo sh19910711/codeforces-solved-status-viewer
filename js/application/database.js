@@ -6,16 +6,18 @@
         [
             'exports',
             'underscore',
-            'utils'
+            'utils',
+            'jquery'
         ],
 
-        function( exports, _, Utils ) {
+        function( exports, _, Utils, $ ) {
             var Database = {};
             var storage = chrome.storage.local; // >= Chrome 20
 
             Database.key = {
                 schemeVersion: 'DATABASE_SCHEME_VERSION',
-                contestList: 'CONTEST_LIST'
+                contestNames: 'CONTEST_NAMES',
+                contestKeys: 'CONTEST_KEYS'
             };
 
             // async.jsの関数で利用できるような形式で書くこと
@@ -60,7 +62,8 @@
                     console.log('@Database::defineScheme: version: 0');
                     var data = {};
                     data[Database.key.schemeVersion] = DATABASE_SCHEME_VERSION;
-                    data[Database.key.contestList] = {};
+                    data[Database.key.contestNames] = {};
+                    data[Database.key.contestKeys] = [];
 
                     storage.set(
                         data,
@@ -74,6 +77,7 @@
             Database.set = function( key, value, callback ) {
                 var data = {};
                 data[key] = value;
+                console.log('@Database::set: ', arguments);
                 storage.set(data, function() {
                     callback();
                 });
